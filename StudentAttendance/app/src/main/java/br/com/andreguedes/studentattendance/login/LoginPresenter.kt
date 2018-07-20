@@ -1,6 +1,8 @@
 package br.com.andreguedes.studentattendance.login
 
-class LoginPresenter {
+import br.com.andreguedes.studentattendance.R
+
+class LoginPresenter(val view: LoginView) {
 
     private val MAX_LOGIN_ATTEMPT = 3
     private var loginAttempt: Int = 0
@@ -14,15 +16,17 @@ class LoginPresenter {
         return loginAttempt >= MAX_LOGIN_ATTEMPT
     }
 
-    fun isLoginSuccess(username: String, password: String): Boolean {
+    fun doLogin(username: String, password: String) {
         if (isLoginAttemptExceeded()) {
-            return false
+            view.showMessage(R.string.msg_max_attempt_error)
+            return
         }
-        if (username.equals("aguedes") && password.equals("123456")) {
-            return true
+        if (username == "aguedes" && password == "123456") {
+            view.showMessage(R.string.msg_login_success)
+            return
         }
         incrementLoginAttempt()
-        return false
+        view.showMessage(R.string.msg_username_password_error)
     }
 
 }
